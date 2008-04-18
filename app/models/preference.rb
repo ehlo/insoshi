@@ -17,14 +17,20 @@
 
 class Preference < ActiveRecord::Base
   attr_accessible :app_name, :server_name, :domain, :smtp_server, 
-                  :email_notifications, :email_verifications, :analytics
+                  :email_notifications, :email_verifications, :analytics,
+				  :smtp_auth, :smtp_server_username, :smtp_server_password
 
   validates_presence_of :domain,       :if => :using_email?
   validates_presence_of :smtp_server,  :if => :using_email?
-  
+
+  validates_presence_of :smtp_server,  :if => :smtp_auth
+  validates_presence_of :smtp_server_username,  :if => :smtp_auth
+  validates_presence_of :smtp_server_password,  :if => :smtp_auth
+
   private
   
     def using_email?
       email_notifications? or email_verifications?
     end
+
 end

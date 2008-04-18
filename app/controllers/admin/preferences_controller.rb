@@ -41,6 +41,9 @@ class Admin::PreferencesController < ApplicationController
     def server_restart?(old_preferences)
       old_preferences.smtp_server  != @preferences.smtp_server or 
       old_preferences.domain != @preferences.domain or
-      old_preferences.server_name != @preferences.server_name
+      old_preferences.server_name != @preferences.server_name or
+      old_preferences.smtp_auth != @preferences.smtp_auth or
+      old_preferences.smtp_server_username != @preferences.smtp_server_username or
+      old_preferences.smtp_server_password != @preferences.smtp_server_password
     end
 end
