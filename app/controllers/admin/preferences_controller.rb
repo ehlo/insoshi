@@ -44,6 +44,9 @@ class Admin::PreferencesController < ApplicationController
       old_preferences.server_name != @preferences.server_name or
       old_preferences.smtp_auth != @preferences.smtp_auth or
       old_preferences.smtp_server_username != @preferences.smtp_server_username or
-      old_preferences.smtp_server_password != @preferences.smtp_server_password
+      old_preferences.smtp_server_password != @preferences.smtp_server_password or
+      old_preferences.smtp_server_port != @preferences.smtp_server_port or
+      old_preferences.smtp_server_tls != @preferences.smtp_server_tls
+
     end
 end

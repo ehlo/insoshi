@@ -4,6 +4,8 @@ class CreatePreferences < ActiveRecord::Migration
     create_table :preferences do |t|
       t.string :domain, :null => false, :default => ""
       t.string :smtp_server, :null => false, :default => ""
+	  t.string :smtp_server_port, :null => false, :default => "25"
+      t.boolean :smtp_server_tls, :null => false, :default => false
       t.boolean :email_notifications, :null => false, :default => false
       t.boolean :email_verifications, :null => false, :default => false
 	  t.boolean :smtp_auth, :null => false, :default => false

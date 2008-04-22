@@ -29,7 +29,13 @@ describe Admin::PreferencesController do
                                      :email_notifications => "1" }
       response.body.should =~ /errorExplanation/
     end
-    
+
+    it "should render messages for email notification error" do
+      put :update, :preferences => { :smtp_server => "mail.example.com", :domain => "example.com", 
+                                     :email_notifications => "1" , :smtp_server_port => ""}
+      response.body.should =~ /errorExplanation/
+    end
+
     it "should update email notifications" do
       @prefs.email_notifications = false
       @prefs.save!
@@ -136,6 +142,70 @@ describe Admin::PreferencesController do
 									 :smtp_auth =>  @prefs.smtp_auth,
 									 :smtp_server_username => @prefs.smtp_server_username,
 									 :smtp_server_password => "newPassword"
+									 }
+      flash[:error].should_not be_nil
+    end
+	
+	it "should update smtp port" do
+      @prefs.smtp_auth = false
+      @prefs.smtp_server_username = false
+      @prefs.smtp_server_password = false
+      @prefs.smtp_server_port = "25"
+      @prefs.smtp_server_tls = false
+      @prefs.save!
+      put :update, :preferences => { :smtp_server => "smtp.example.com",
+                                     :domain => "example.com", 
+                                     :email_notifications => "1",
+									 :smtp_auth =>  "1",
+									 :smtp_server_username => "username",
+									 :smtp_server_password => "password",
+									 :smtp_server_port => "26"
+									 }
+      @prefs.reload.smtp_server_port.should == "26"
+    end
+
+	it "should update smtp use tls" do
+      @prefs.smtp_auth = false
+      @prefs.smtp_server_username = false
+      @prefs.smtp_server_password = false
+      @prefs.smtp_server_port = "25"
+      @prefs.smtp_server_tls = false
+      @prefs.save!
+      @prefs.smtp_server_tls.should be_false
+      put :update, :preferences => { :smtp_server => "smtp.example.com",
+                                     :domain => "example.com", 
+                                     :email_notifications => "1",
+									 :smtp_auth =>  "1",
+									 :smtp_server_username => "username",
+									 :smtp_server_password => "password",
+									 :smtp_server_port => "25",
+									 :smtp_server_tls => true
+									 }
+      @prefs.reload.smtp_server_tls.should be_true
+    end
+
+    it "should have a flash warning if the smtp port changes" do
+      put :update, :preferences => { :smtp_server => @prefs.smtp_server,
+                                     :domain => @prefs.domain, 
+                                     :email_notifications => @prefs.email_notifications,
+									 :smtp_auth =>  @prefs.smtp_auth,
+									 :smtp_server_username => @prefs.smtp_server_username,
+									 :smtp_server_password => @prefs.smtp_server_password,
+									 :smtp_server_port => "26",
+									 :stmp_server_tls => @prefs.smtp_server_tls
+									 }
+      flash[:error].should_not be_nil
+    end
+	
+    it "should have a flash warning if the smtp use tls changes" do
+      put :update, :preferences => { :smtp_server => @prefs.smtp_server,
+                                     :domain => @prefs.domain, 
+                                     :email_notifications => @prefs.email_notifications,
+									 :smtp_auth =>  @prefs.smtp_auth,
+									 :smtp_server_username => @prefs.smtp_server_username,
+									 :smtp_server_password => @prefs.smtp_server_password,
+									 :smtp_server_port => @prefs.smtp_server_port,
+									 :smtp_server_tls => true
 									 }
       flash[:error].should_not be_nil
     end
