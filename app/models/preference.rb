@@ -24,14 +24,18 @@ class Preference < ActiveRecord::Base
   validates_presence_of :domain,       :if => :using_email?
   validates_presence_of :smtp_server,  :if => :using_email?
   validates_presence_of :smtp_server_port,  :if => :using_email?
-  validates_presence_of :smtp_server,  :if => :smtp_auth
-  validates_presence_of :smtp_server_username,  :if => :smtp_auth
-  validates_presence_of :smtp_server_password,  :if => :smtp_auth
+  validates_presence_of :smtp_server,  :if => :using_smtpauth?
+  validates_presence_of :smtp_server_username,  :if => :using_smtpauth?
+  validates_presence_of :smtp_server_password,  :if => :using_smtpauth?
 
   private
   
     def using_email?
       email_notifications? or email_verifications?
     end
+	
+	def using_smtpauth?
+	  smtp_auth?
+	end
 
 end
