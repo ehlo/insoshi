@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
   # Used for both wall and blog comments.
   def create
     @comment = parent.comments.new(params[:comment].
-                                   merge(:commenter => current_person))
+                                   merge(:commenter => current_person, :sender_ip => request.env_table["REMOTE_ADDR"]))
     
     respond_to do |format|
       if @comment.save
