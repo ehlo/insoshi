@@ -63,7 +63,7 @@ class MessagesController < ApplicationController
       # Send messages to all (active) people.
       messages = Person.active.inject([]) do |messages, person|
         message = Message.new(params[:message].merge(:sender => current_person,
-                                                     :recipient => person))
+                                                     :recipient => person, :sender_ip => request.env_table["REMOTE_ADDR"]))
         messages.push(message)
       end
       respond_to do |format|
@@ -78,7 +78,7 @@ class MessagesController < ApplicationController
       end
     else
       @message = Message.new(params[:message].merge(:sender => current_person,
-                                                    :recipient => @recipient))
+                                                    :recipient => @recipient), :sender_ip => request.env_table["REMOTE_ADDR"])
     
       respond_to do |format|
         if @message.save
