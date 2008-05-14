@@ -19,11 +19,13 @@
     Sent <%= time_ago_in_words @message.created_at %> ago |
     <%= link_to "Reply", reply_message_path(@message) %> |
     <% unless @message.trashed?(current_person) -%>
-      <%= link_to("Trash", @message, :method => :delete) %>
-    <% else -%>
+      <%= link_to("Trash", @message, :method => :delete) %> |
+      <%= link_to "Report as abuse", abuse_message_path(@message), :confirm => "Are yousure you want to report this message as an abuse?" %>
+	<% else -%>
       <%= link_to "Untrash", undestroy_message_path(@message), 
                              :method => :put %>
     <% end -%>
+	
   </p>
 
 <%- end -%>

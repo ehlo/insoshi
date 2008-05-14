@@ -17,12 +17,13 @@
 #  type                 :string(255)     
 #  created_at           :datetime        
 #  updated_at           :datetime        
+#  sender_ip			:string(255)
 #
 
 class Message < Communication
   extend PreferencesHelper
   
-  attr_accessor :reply, :parent, :send_mail
+  attr_accessor :reply, :parent, :send_mail, :abuse
   acts_as_ferret :fields => [ :subject, :content ] if search?
   
   MAX_CONTENT_LENGTH = MAX_TEXT_LENGTH

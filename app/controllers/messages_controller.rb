@@ -57,6 +57,28 @@ class MessagesController < ApplicationController
     end    
   end
 
+  def abuse
+    original_message = Message.find(params[:id])
+	abuse_message_header = "Please insert your comment HERE\n\n\n---\n"
+	abuse_message_header += "Original Sender ID: " + original_message.sender.id.to_s + "\n"
+	abuse_message_header += "Original Sender Name: " + original_message.sender.name.to_s + "\n"
+	abuse_message_header += "Original Sender IP: " + original_message.sender_ip.to_s + "\n"
+	abuse_message_header += "Submit date: " + original_message.created_at.to_s + "\n"
+	abuse_message_header += "Original Recipient ID: " + original_message.recipient.id.to_s + "\n"
+	abuse_message_header += "Original Message ID: " + original_message.id.to_s + "\n"
+	abuse_message_header += "Original message:\n" + "---\n" + original_message.content
+    @message = Message.new(:parent_id => original_message.id,
+                           :subject => "Abuse report: " + original_message.subject,
+                           :sender => current_person,
+                           :recipient => Person.find_first_admin,
+						   :content => abuse_message_header,
+						   :sender_ip => request.env_table["REMOTE_ADDR"])
+    @recipient = Person.find_first_admin
+    respond_to do |format|
+      format.html { render :action => "new" }
+	end
+  end
+
   def create
     
     if params["commit"] == "Send to all" and current_person.admin?

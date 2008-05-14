@@ -7,7 +7,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :photos
   map.resource :session
   map.resources :messages, :collection => { :sent => :get, :trash => :get },
-                           :member => { :reply => :get, :undestroy => :put }
+                           :member => { :reply => :get, :undestroy => :put, :abuse => :get }
 
   map.resources :people, :member => { :verify => :get,
                                       :common_contacts => :get }
